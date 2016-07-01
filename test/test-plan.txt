@@ -1,0 +1,12 @@
+This project requires extensive testing.
+All cases must be covered for current and future use.
+
+Areas to test include:
+    -Normal Cases
+    -Reentrancy
+    -Thread Safety
+    -Efficiency
+
+Normal cases are self-explanitory.
+Reentrancy and thread safety must be properly documented.
+Efficiency will be measured relative to other dynamic string libraries and the standard C library static string manipulation functions.
