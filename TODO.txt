@@ -4,3 +4,4 @@ Black box common functionality, try not to sacrifice performance.
 Include basic thread safety, rely on pthread for now.
 Make thread safety operating system independent.
 Include wide string and/or UTF-8/16/32 support.
+Use stdbool.h, it's not that bad.
