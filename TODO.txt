@@ -1,0 +1,6 @@
+Should we rely on size_t?
+Create type generic macro versions of functions.
+Black box common functionality, try not to sacrifice performance.
+Include basic thread safety, rely on pthread for now.
+Make thread safety operating system independent.
+Include wide string and/or UTF-8/16/32 support.
