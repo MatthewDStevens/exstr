@@ -157,6 +157,29 @@ _Bool exstr_append_string(const char * const source, exstr * const dest);
  */
 _Bool exstr_append_char(const char source, exstr * const dest);
 
+// Subtraction functions ------------------------------------------------------
+
+/**
+ * Deletes a single index.
+ *
+ * str: string to modify
+ * index: index to delete at
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_delete_at(exstr * const str, size_t index);
+
+/**
+ * Deletes a range of indices.
+ *
+ * str: string to modify
+ * fromindex: index to start deletion at
+ * toindex: index to stop deletion at (exclusively)
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex);
+
 // Destruction functions ------------------------------------------------------
 
 /**

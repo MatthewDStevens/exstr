@@ -304,6 +304,23 @@ _Bool exstr_append_char(const char source, exstr * const dest) {
 	return exstr_insert_char(source, dest, dest->length);
 }
 
+_Bool exstr_delete_at(exstr * const str, size_t index) {
+	return exstr_delete_range(str, index, index + 1);
+}
+
+_Bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex) {
+	// Cannot delete from NULL or bad index
+	if (str == NULL || fromindex >= toindex || fromindex >= str->length || toindex > str->length) {
+		return 0;
+	}
+
+	// TODO: Data scrubbing
+	// Overwrite data
+	memcpy(str->str + fromindex, str->str + toindex, toindex - fromindex);
+
+	return 1;
+}
+
 void exstr_free(exstr *str) {
 	// Don't even think about it, kiddo
 	if (str == NULL) {
