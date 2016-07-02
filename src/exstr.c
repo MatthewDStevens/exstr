@@ -9,6 +9,7 @@
 
 #include "exstr.h"
 #include <string.h>
+#include <stdlib.h>
 //TODO: Conditional Linux library includes
 //TODO: Conditional Windows library includes
 
@@ -33,7 +34,7 @@ static inline void clear_data(const exstr * const str) {
 /**
  * Reallocates an exstr object to meet a new length.
  */
-static inline _Bool exstr_realloc(exstr * const str, const size_t length, _Bool force) {
+static inline _Bool exstr_realloc(exstr * const str, size_t length, _Bool force) {
 	size_t new_capacity;
 
 	// Check if we need to realloc
@@ -45,7 +46,7 @@ static inline _Bool exstr_realloc(exstr * const str, const size_t length, _Bool 
 	new_capacity = get_capacity(length);
 
 	// Realloc
-	const char *new_str = realloc(str->str, new_capacity);
+	char *new_str = realloc(str->str, new_capacity);
 	if (new_str != NULL) {
 		str->str = new_str;
 		str->capacity = new_capacity;
@@ -287,7 +288,7 @@ _Bool exstr_insert_char(const char source, exstr * const dest, size_t index) {
 		return 0;
 	}
 
-	return exstr_insert_at(&source, index, 1);
+	return exstr_insert_at(&source, dest, index, 1);
 }
 
 // TODO: Make append functions into macros or alter behavior?

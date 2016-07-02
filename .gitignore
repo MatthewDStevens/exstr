@@ -35,3 +35,4 @@
 # Eclipse Files/Directories
 .cproject
 .project
+/Debug/
