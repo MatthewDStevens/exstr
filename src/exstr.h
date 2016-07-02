@@ -12,10 +12,15 @@
 
 #include <stddef.h>
 
-//TODO: Shoud define own size_t?
-//TODO: use ifdef for C11, use type generic macros for type induction
-//TODO: Wide string and/or UTF-8/16/32 support
-//TODO: Consider extracting into functions and sacrificing performance
+#if __STDC__ == 1
+	#if __STDC_VERSION__ >= 201112L
+		// TODO: Define type generic stuff
+	#elif __STDC_VERSION__ < 199901L
+		#error "libexstr must be compiled with C99 or above"
+	#endif
+#else
+	#error "libexstr must be compiled under a C standard"
+#endif
 
 // Dynamic string definition
 // TODO: Consider buffer in string and realloc struct as a whole
@@ -36,7 +41,7 @@ typedef struct {
  *
  * return: true if successful, false otherwise
  */
-_Bool exstr_init(exstr *str, const size_t length);
+_Bool exstr_init(exstr *str, size_t length);
 
 /**
  * Creates a new exstr object initialized to a specified length. If length == 0, an appropriate length is chosen.
@@ -45,7 +50,7 @@ _Bool exstr_init(exstr *str, const size_t length);
  *
  * return: pointer to new exstr object, NULL on failure
  */
-exstr *exstr_new(const size_t length);
+exstr *exstr_new(size_t length);
 
 /**
  * Creates a new exstr object from a character array.
@@ -87,6 +92,70 @@ _Bool exstr_copy(const exstr * const source, exstr * const dest);
  */
 _Bool exstr_copy_string(const char * const source, exstr * const dest);
 
+// Addition functions ---------------------------------------------------------
+
+/**
+ * Inserts at an index.
+ *
+ * source: source of string to insert
+ * dest: destination to insert to
+ * index: index at which to insert string
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_insert(const exstr * const source, exstr * const dest, size_t index);
+
+/**
+ * Inserts at an index.
+ *
+ * source: source of string to insert
+ * dest: destination to insert to
+ * index: index at which to insert string
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_insert_string(const char * const source, exstr * const dest, size_t index);
+
+/**
+ * Inserts at an index.
+ *
+ * source: source of string to insert
+ * dest: destination to insert to
+ * index: index at which to insert string
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_insert_char(const char source, exstr * const dest, size_t index);
+
+/**
+ * Appends to the end.
+ *
+ * source: source of string to append
+ * dest: destination to append to
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_append(const exstr * const source, exstr * const dest);
+
+/**
+ * Appends to the end.
+ *
+ * source: source of string to append
+ * dest: destination to append to
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_append_string(const char * const source, exstr * const dest);
+
+/**
+ * Appends to the end.
+ *
+ * source: source of string to append
+ * dest: destination to append to
+ *
+ * return: true on success, false otherwise
+ */
+_Bool exstr_append_char(const char source, exstr * const dest);
 
 // Destruction functions ------------------------------------------------------
 
