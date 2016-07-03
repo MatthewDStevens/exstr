@@ -9,3 +9,6 @@ CFLAGS_TEST = -std=c11 -c
 
 exstr.o: exstr.c exstr.h
 	$(CC) $(CFLAGS) -c -o exstr.o exstr.c
+
+clean:
+	rm -f ./src/*.o

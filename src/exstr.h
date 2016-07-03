@@ -11,6 +11,7 @@
 #define EXSTR_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 #if __STDC__ == 1
 	#if __STDC_VERSION__ >= 201112L
@@ -41,7 +42,7 @@ typedef struct {
  *
  * return: true if successful, false otherwise
  */
-_Bool exstr_init(exstr *str, size_t length);
+bool exstr_init(exstr *str, size_t length);
 
 /**
  * Creates a new exstr object initialized to a specified length. If length == 0, an appropriate length is chosen.
@@ -80,7 +81,7 @@ exstr *exstr_clone(const exstr * const source);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_copy(const exstr * const source, exstr * const dest);
+bool exstr_copy(const exstr * const source, exstr * const dest);
 
 /**
  * Copies data from a C style string.
@@ -90,7 +91,7 @@ _Bool exstr_copy(const exstr * const source, exstr * const dest);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_copy_string(const char * const source, exstr * const dest);
+bool exstr_copy_string(const char * const source, exstr * const dest);
 
 // Addition functions ---------------------------------------------------------
 
@@ -103,7 +104,7 @@ _Bool exstr_copy_string(const char * const source, exstr * const dest);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_insert(const exstr * const source, exstr * const dest, size_t index);
+bool exstr_insert(const exstr * const source, exstr * const dest, size_t index);
 
 /**
  * Inserts at an index.
@@ -114,7 +115,7 @@ _Bool exstr_insert(const exstr * const source, exstr * const dest, size_t index)
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_insert_string(const char * const source, exstr * const dest, size_t index);
+bool exstr_insert_string(const char * const source, exstr * const dest, size_t index);
 
 /**
  * Inserts at an index.
@@ -125,7 +126,7 @@ _Bool exstr_insert_string(const char * const source, exstr * const dest, size_t 
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_insert_char(const char source, exstr * const dest, size_t index);
+bool exstr_insert_char(const char source, exstr * const dest, size_t index);
 
 /**
  * Appends to the end.
@@ -135,7 +136,7 @@ _Bool exstr_insert_char(const char source, exstr * const dest, size_t index);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_append(const exstr * const source, exstr * const dest);
+bool exstr_append(const exstr * const source, exstr * const dest);
 
 /**
  * Appends to the end.
@@ -145,7 +146,7 @@ _Bool exstr_append(const exstr * const source, exstr * const dest);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_append_string(const char * const source, exstr * const dest);
+bool exstr_append_string(const char * const source, exstr * const dest);
 
 /**
  * Appends to the end.
@@ -155,7 +156,7 @@ _Bool exstr_append_string(const char * const source, exstr * const dest);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_append_char(const char source, exstr * const dest);
+bool exstr_append_char(const char source, exstr * const dest);
 
 // Subtraction functions ------------------------------------------------------
 
@@ -167,7 +168,7 @@ _Bool exstr_append_char(const char source, exstr * const dest);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_delete_at(exstr * const str, size_t index);
+bool exstr_delete_at(exstr * const str, size_t index);
 
 /**
  * Deletes a range of indices.
@@ -178,7 +179,7 @@ _Bool exstr_delete_at(exstr * const str, size_t index);
  *
  * return: true on success, false otherwise
  */
-_Bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex);
+bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex);
 
 // Destruction functions ------------------------------------------------------
 

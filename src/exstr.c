@@ -34,12 +34,12 @@ static inline void clear_data(const exstr * const str) {
 /**
  * Reallocates an exstr object to meet a new length.
  */
-static inline _Bool exstr_realloc(exstr * const str, size_t length, _Bool force) {
+static inline bool exstr_realloc(exstr * const str, size_t length, bool force) {
 	size_t new_capacity;
 
 	// Check if we need to realloc
 	if (!force && length <= str->capacity) {
-		return 1;
+		return true;
 	}
 
 	// Get new capacity
@@ -50,12 +50,12 @@ static inline _Bool exstr_realloc(exstr * const str, size_t length, _Bool force)
 	if (new_str != NULL) {
 		str->str = new_str;
 		str->capacity = new_capacity;
-		return 1;
+		return true;
 	}
-	return 0;
+	return false;
 }
 
-_Bool exstr_init(exstr *str, size_t length) {
+bool exstr_init(exstr *str, size_t length) {
 	// Set length and capacity
 	if (length == 0) {
 		// TODO: Come up with better default
@@ -69,11 +69,11 @@ _Bool exstr_init(exstr *str, size_t length) {
 	// Allocate space for string
 	str->str = (char *)malloc(str->capacity * sizeof(char)); // TODO: More efficient allocation (higher size, using OS specific functions
 	if (str->str == NULL) {
-		return 0;
+		return false;
 	}
 
 	str->null_term = '\0';
-	return 1;
+	return true;
 }
 
 
@@ -173,10 +173,10 @@ exstr *exstr_clone(const exstr * const source) {
 	return str;
 }
 
-_Bool exstr_copy(const exstr * const source, exstr * const dest) {
+bool exstr_copy(const exstr * const source, exstr * const dest) {
 	// Can't copy from/to NULL
 	if (source == NULL || dest == NULL) {
-		return 0;
+		return false;
 	}
 
 	// Shallow copy primitive members
@@ -188,14 +188,14 @@ _Bool exstr_copy(const exstr * const source, exstr * const dest) {
 	clear_data(dest);
 	dest->str = (char *)malloc(dest->capacity * sizeof(char));
 	if (dest->str == NULL) {
-		return 0;
+		return false;
 	}
 	memcpy(dest->str, source->str, source->length + 1);
 
-	return 1;
+	return true;
 }
 
-_Bool exstr_copy_string(const char * const source, exstr * const dest) {
+bool exstr_copy_string(const char * const source, exstr * const dest) {
 	size_t source_length;
 
 	// Cannot initialize from/to NULL
@@ -212,19 +212,19 @@ _Bool exstr_copy_string(const char * const source, exstr * const dest) {
 	clear_data(dest);
 	dest->str = (char *)malloc(dest->capacity * sizeof(char));
 	if (dest->str == NULL) {
-		return 0;
+		return false;
 	}
 
 	// Copy string
 	memcpy(dest->str, source, source_length + 1);
 
-	return 1;
+	return true;
 }
 
 /**
  * Performs insertion at an index.
  */
-static inline _Bool exstr_insert_at(const char * const source, exstr * const dest, size_t index, size_t insert_length) {
+static inline bool exstr_insert_at(const char * const source, exstr * const dest, size_t index, size_t insert_length) {
 	// Separate original contents
 	memcpy(dest->str + index + insert_length, dest->str + index, dest->length - index + 1); // TODO: Check math
 
@@ -234,15 +234,15 @@ static inline _Bool exstr_insert_at(const char * const source, exstr * const des
 	// Update length
 	dest->length += insert_length;
 
-	return 1;
+	return true;
 }
 
-_Bool exstr_insert(const exstr * const source, exstr * const dest, size_t index) {
+bool exstr_insert(const exstr * const source, exstr * const dest, size_t index) {
 	size_t new_length;
 
 	// Can't insert from/to NULL or bad index
 	if (source == NULL || dest == NULL || index >= dest->length) {
-		return 0;
+		return false;
 	}
 
 	// Calculate length
@@ -250,19 +250,19 @@ _Bool exstr_insert(const exstr * const source, exstr * const dest, size_t index)
 
 	// Ensure space
 	if (!exstr_realloc(dest, new_length + 1, 1)) {
-		return 0;
+		return false;
 	}
 
 	return exstr_insert_at(source->str, dest, index, source->length);
 }
 
-_Bool exstr_insert_string(const char * const source, exstr * const dest, size_t index) {
+bool exstr_insert_string(const char * const source, exstr * const dest, size_t index) {
 	size_t source_length;
 	size_t new_length;
 
 	// Can't insert from/to NULL or bad index
 	if (source == NULL || dest == NULL || index >= dest->length) {
-		return 0;
+		return false;
 	}
 
 	// Calculate lengths
@@ -271,21 +271,21 @@ _Bool exstr_insert_string(const char * const source, exstr * const dest, size_t 
 
 	// Ensure space
 	if (!exstr_realloc(dest, new_length + 1, 1)) {
-		return 0;
+		return false;
 	}
 
 	return exstr_insert_at(source, dest, index, source_length);
 }
 
-_Bool exstr_insert_char(const char source, exstr * const dest, size_t index) {
+bool exstr_insert_char(const char source, exstr * const dest, size_t index) {
 	// Can't insert to NULL or bad index
 	if (dest == NULL || index >= dest->length) {
-		return 0;
+		return false;
 	}
 
 	// Ensure space
 	if (!exstr_realloc(dest, dest->length + 2, 1)) {
-		return 0;
+		return false;
 	}
 
 	return exstr_insert_at(&source, dest, index, 1);
@@ -293,33 +293,33 @@ _Bool exstr_insert_char(const char source, exstr * const dest, size_t index) {
 
 // TODO: Make append functions into macros or alter behavior?
 
-_Bool exstr_append(const exstr * const source, exstr * const dest) {
+bool exstr_append(const exstr * const source, exstr * const dest) {
 	return exstr_insert(source, dest, dest->length);
 }
 
-_Bool exstr_append_string(const char * const source, exstr * const dest) {
+bool exstr_append_string(const char * const source, exstr * const dest) {
 	return exstr_insert_string(source, dest, dest->length);
 }
 
-_Bool exstr_append_char(const char source, exstr * const dest) {
+bool exstr_append_char(const char source, exstr * const dest) {
 	return exstr_insert_char(source, dest, dest->length);
 }
 
-_Bool exstr_delete_at(exstr * const str, size_t index) {
+bool exstr_delete_at(exstr * const str, size_t index) {
 	return exstr_delete_range(str, index, index + 1);
 }
 
-_Bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex) {
+bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex) {
 	// Cannot delete from NULL or bad index
 	if (str == NULL || fromindex >= toindex || fromindex >= str->length || toindex > str->length) {
-		return 0;
+		return false;
 	}
 
 	// TODO: Data scrubbing
 	// Overwrite data
 	memcpy(str->str + fromindex, str->str + toindex, toindex - fromindex);
 
-	return 1;
+	return true;
 }
 
 void exstr_free(exstr *str) {
