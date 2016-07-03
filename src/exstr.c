@@ -322,6 +322,49 @@ bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex) {
 	return true;
 }
 
+int exstr_compare(const exstr * const str1, const exstr * const str2) {
+	// Check lengths (this is nice and easy, so we optimize it)
+	if (str1->length < str2->length) {
+		return (int)str2->str[str1->length];
+	}
+	else if (str2->length < str1->length) {
+		return (int)str1->str[str2->length];
+	}
+	else {
+		int difference = 0;
+		const char *str1_pos = str1->str;
+		const char *str2_pos = str2->str;
+
+		// Do the iterative approach
+		for (size_t i = 0; i < str1->length; i++, str1_pos++, str2_pos++) {
+			difference = *str1_pos - *str2_pos;
+			if (difference != 0) {
+				return difference;
+			}
+		}
+
+		// Must be the same string
+		return 0;
+	}
+}
+
+int exstr_compare_string(const exstr * const str1, const char * const str2) {
+	int difference = 0;
+	const char *str1_pos = str1->str;
+	const char *str2_pos = str2;
+
+	// Do the iterative approach
+	for (size_t i = 0; i < str1->length; i++, str1_pos++, str2_pos++) {
+		difference = *str1_pos - *str2_pos;
+		if (difference != 0) {
+			return difference;
+		}
+	}
+
+	// Must be the same string
+	return 0;
+}
+
 void exstr_free(exstr *str) {
 	// Don't even think about it, kiddo
 	if (str == NULL) {

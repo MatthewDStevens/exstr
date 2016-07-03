@@ -181,6 +181,34 @@ bool exstr_delete_at(exstr * const str, size_t index);
  */
 bool exstr_delete_range(exstr * const str, size_t fromindex, size_t toindex);
 
+// Comparison functions -------------------------------------------------------
+
+/**
+ * Compares two strings. A the left string is less than the right string
+ * if and only if the value of the character in the left string at the index
+ * where the two strings first differ is less than the character in the right
+ * string or (in a similar way), the left string is shorter than the right.
+ *
+ * str1: left string
+ * str2: right string
+ *
+ * return: the difference between the two strings at the first different character
+ */
+int exstr_compare(const exstr * const str1, const exstr * const str2);
+
+/**
+ * Compares two strings. A the left string is less than the right string
+ * if and only if the value of the character in the left string at the index
+ * where the two strings first differ is less than the character in the right
+ * string or (in a similar way), the left string is shorter than the right.
+ *
+ * str1: left string
+ * str2: right string
+ *
+ * return: the difference between the two strings at the first different character
+ */
+int exstr_compare_string(const exstr * const str1, const char * const str2);
+
 // Destruction functions ------------------------------------------------------
 
 /**
