@@ -15,7 +15,20 @@
 
 #if __STDC__ == 1
 	#if __STDC_VERSION__ >= 201112L
-		// TODO: Define type generic stuff
+		#define exstr_strcpy(source, dest) _Generic((source), \
+				exstr *: exstr_copy((source), (dest)), \
+				char *: exstr_copy_string((source), (dest)))
+		#define exstr_strinsert(source, dest, index) _Generic((source), \
+				exstr *: exstr_insert((source), (dest), (index)), \
+				char *: exstr_insert_string((source), (dest), (index)), \
+				char: exstr_insert_char((source), (dest), (index)))
+		#define exstr_strcat(source, dest) _Generic((source), \
+				exstr *: exstr_append((source), (dest)), \
+				char *: exstr_append_string((source), (dest)), \
+				char: exstr_append_char((source), (dest)))
+		#define exstr_strcmp(str1, str2) _Generic((str2), \
+				exstr *: exstr_compare((str1), (str2)), \
+				char *: exstr_compare_string((str1), (str2)))
 	#elif __STDC_VERSION__ < 199901L
 		#error "libexstr must be compiled with C99 or above"
 	#endif
