@@ -42,7 +42,6 @@ typedef struct {
 	size_t length;
 	size_t capacity; // TODO: For future allocation schemes
 	char *str;
-	char null_term; // TODO: Safety mechanism
 } exstr;
 
 // Construction functions -----------------------------------------------------
@@ -230,5 +229,21 @@ int exstr_compare_string(const exstr * const str1, const char * const str2);
  * str: object to be freed
  */
 void exstr_free(exstr *str);
+
+/**
+ * Clears all data from a string.
+ *
+ * str: object to be cleared
+ *
+ * return: true on success, false otherwise
+ */
+bool exstr_clear(exstr *str);
+
+/**
+ * Zeroes all data from a string.
+ *
+ * str: object to be zeroed
+ */
+void exstr_zero(exstr *str);
 
 #endif //EXSTR_H

@@ -10,8 +10,6 @@
 #include "exstr.h"
 #include <string.h>
 #include <stdlib.h>
-//TODO: Conditional Linux library includes
-//TODO: Conditional Windows library includes
 
 #define DEFAULT_LENGTH 128
 
@@ -72,7 +70,6 @@ bool exstr_init(exstr *str, size_t length) {
 		return false;
 	}
 
-	str->null_term = '\0';
 	return true;
 }
 
@@ -100,9 +97,6 @@ exstr *exstr_new(size_t length) {
 		free(str);
 		return NULL;
 	}
-
-	// Set null terminator
-	str->null_term = '\0';
 
 	return str;
 }
@@ -133,11 +127,8 @@ exstr *exstr_from_string(const char * const source) {
 		return NULL;
 	}
 
-	// Copy ar
-	strcpy(str->str, source);
-
-	// Set null terminator
-	str->null_term = '\0';
+	// Copy source
+	memcpy(str->str, source, source_length + 1);
 
 	return str;
 }
@@ -157,7 +148,6 @@ exstr *exstr_clone(const exstr * const source) {
 	// Shallow copy primitive members
 	str->length = source->length;
 	str->capacity = source->capacity;
-	str->null_term = '\0';
 
 	// Deep copy other parts
 	if (str->str != NULL) {
@@ -182,7 +172,6 @@ bool exstr_copy(const exstr * const source, exstr * const dest) {
 	// Shallow copy primitive members
 	dest->length = source->length;
 	dest->capacity = source->capacity;
-	dest->null_term = '\0';
 
 	// Deep copy other parts
 	clear_data(dest);
@@ -372,4 +361,24 @@ void exstr_free(exstr *str) {
 	}
 	free(str->str);
 	free(str);
+}
+
+bool exstr_clear(exstr *str) {
+	// Don't even think about it, kiddo
+	if (str == NULL) {
+		return false;
+	}
+	str->length = 0;
+	bool was_successful =  exstr_realloc(str, str->length, true);
+	memcpy(str->str, "", 1);
+	return was_successful;
+}
+
+void exstr_zero(exstr *str) {
+	// Don't even think about it, kiddo
+	if (str == NULL) {
+		return;
+	}
+	memset(str->str, '\0', str->capacity);
+	str->length = 0;
 }
